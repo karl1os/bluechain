@@ -1,104 +1,104 @@
-paquete  com.aprendeblockchain.miblockchainenjava.commons.estructuras ;
+package com.aprendeblockchain.miblockchainenjava.commons.estructuras;
 
-import  java.util.ArrayList ;
-import  java.util.Iterator ;
-import  java.util.List ;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-/ *
- * La cadena de bloques es prácticamente una lista de bloques enlazados y cada bloque tiene el identificador del bloque anterior.
-* * /
- clase  pública CadenaDeBloques {
+/*
+ * La cadena de bloques es esencialmente una lista de bloques enlazados ya que cada bloque tiene el identificador del bloque anterior.
+ * */
+public class CadenaDeBloques {
 
 	// Lista de bloques en la cadena ordenados por altura
-	 Lista privada < Bloque > bloques =  new  ArrayList < Bloque > ();
+	private List<Bloque> bloques = new ArrayList<Bloque>();
 	// Saldos actuales de las cuentas
-	privadas  RegistroSaldos saldos =  nuevos  RegistroSaldos ();
+	private RegistroSaldos saldos = new RegistroSaldos();
 
-	 CadenaDeBloques público () {
+	public CadenaDeBloques() {
 	}
 
-	 CadenaDeBloques público ( CadenaDeBloques  cadena ) lanza  Excepción {
-		esta . setBloques (cadena . getBloques ());
+	public CadenaDeBloques(CadenaDeBloques cadena) throws Exception {
+		this.setBloques(cadena.getBloques());
 	}
 
-	 Lista  pública < Bloque > getBloques () {
-		devolver bloques;
+	public List<Bloque> getBloques() {
+		return bloques;
 	}
 
-	public  void  setBloques ( List < Bloque >  bloques ) lanza  Exception {
-		esta . bloques =  new  ArrayList < Bloque > ();
-		para ( Bloque bloque : bloques) {
-			esta . agregarBloque (bloque);
+	public void setBloques(List<Bloque> bloques) throws Exception {
+		this.bloques = new ArrayList<Bloque>();
+		for (Bloque bloque : bloques) {
+			this.añadirBloque(bloque);
 		}
 	}
 
-	public  boolean  estaVacia () {
-		devuelve  esto . bloques ==  nulo  ||  esta . bloques . esta vacio();
+	public boolean estaVacia() {
+		return this.bloques == null || this.bloques.isEmpty();
 	}
 
-	public  int  getNumeroBloques () {
-		return (estaVacia () ?  0  :  this . bloques . size ());
+	public int getNumeroBloques() {
+		return (estaVacia() ? 0 : this.bloques.size());
 	}
 
-	públicas  RegistroSaldos  getSaldos () {
-		devuelve  esto . saldos
+	public RegistroSaldos getSaldos() {
+		return this.saldos;
 	}
 
-	/ **
+	/**
 	 * Obtener el ultimo bloque en la cadena
-	 * * 
+	 * 
 	 * @return Ultimo bloque de la cadena
-	 * /
-	public  Bloque  getUltimoBloque () {
-		if (estaVacia ()) {
-			volver  nulo ;
+	 */
+	public Bloque getUltimoBloque() {
+		if (estaVacia()) {
+			return null;
 		}
-		devuelve  esto . bloques . get ( this . bloques . size () -  1 );
+		return this.bloques.get(this.bloques.size() - 1);
 	}
 
-	/ **
+	/**
 	 * Añadir un bloque a la cadena
 	 * @param bloque a ser añadido
-	 * Excepción @throws
-	 * /
-	public void añ adirBloque ( Bloque  bloque ) lanza  Exception {
+	 * @throws Exception
+	 */
+	public void añadirBloque(Bloque bloque) throws Exception {
 
-		// iteramos y procesamos las transacciones. Si todo es correcto lo añadido a la cadena
-		Iterador < Transacción > itr = bloque . getTransacciones () . iterador ();
+		// iteramos y procesamos las transacciones. Si todo es correcto lo añadimos a la cadena
+		Iterator<Transaccion> itr = bloque.getTransacciones().iterator();
 
-		while (itr . hasNext ()) {
-			Transaccion transaccion = ( Transaccion ) itr . próximo();
+		while (itr.hasNext()) {
+			Transaccion transaccion = (Transaccion) itr.next();
 			// actualizar saldos
-			saldos . liquidarTransaccion (transaccion);
+			saldos.liquidarTransaccion(transaccion);
 		}
 
-		esta . bloques . agregar (bloque);
+		this.bloques.add(bloque);
 
-		Sistema . a cabo . println (saldos . toString () +  " \ n " );
+		System.out.println(saldos.toString() + "\n");
 	}
 
-	@Anular
-	public  boolean  equals ( Objeto  o ) {
-		si ( esto  == o)
-			volver  verdadero ;
-		if (o ==  null  || getClass () ! = o . getClass ())
-			devuelve  falso ;
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
 
-		CadenaDeBloques cadena = ( CadenaDeBloques ) o;
+		CadenaDeBloques cadena = (CadenaDeBloques) o;
 
-		if (bloques . size () ! = cadena . getBloques () . size ())
-			devuelve  falso ;
+		if (bloques.size() != cadena.getBloques().size())
+			return false;
 
-		for ( int i =  0 ; i < bloques . size (); i ++ ) {
-			if (bloques . get (i) ! = cadena . getBloques () . get (i))
-				devuelve  falso ;
+		for (int i = 0; i < bloques.size(); i++) {
+			if (bloques.get(i) != cadena.getBloques().get(i))
+				return false;
 		}
 
-		volver  verdadero ;
+		return true;
 	}
 
-	@Anular
-	public  String  toString () {
-		devolver bloques . Encadenar();
+	@Override
+	public String toString() {
+		return bloques.toString();
 	}
 }
